@@ -1,0 +1,10 @@
+@import './mixins/mixins.scss';
+.image {
+    @include aspect-ratio(1000, 420);
+    &__item {
+        background: url("/img/Klaus.jpg") no-repeat;
+        background-size: 100% auto;
+        height: 100%;
+        width: 100%;
+    }
+}
