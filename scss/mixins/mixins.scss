@@ -5,7 +5,7 @@
         content: " ";
         padding-top: ($height / $width) * 100%;
     }
-    >&__content {
+    >.image__content {
         position: absolute;
         top: 0;
         left: 0;
