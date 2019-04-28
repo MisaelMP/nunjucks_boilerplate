@@ -2,11 +2,8 @@
 {% extends "templates/default.njk" %}
 {% block content %}
 
-	<h1 class="title is-1 center has-background-light">Bulma Website</h1>
-	<div>
-		<ul>
-			<li>this is the body of the</li>
-		</uL>
-	</div>
+	<h1 class="title title-header is-1 center has-background-light">Bulma Website</h1>
+	{% include "templates/partials/_main.njk" %}
+	{% include "templates/partials/_sub-main.njk" %}
 
 {% endblock %}
