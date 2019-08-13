@@ -163,4 +163,4 @@ exports.img = img;
 // Default task
 // -----------------------------------------------------------------------------
 
-gulp.task('default', gulp.parallel(scss, nunjucks, img, scripts, watch, browserReload));
+exports.default = gulp.parallel(scss, nunjucks, img, scripts, watch, browserReload);
