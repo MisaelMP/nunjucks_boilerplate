@@ -52,8 +52,7 @@ function scss() {
 
 function scripts() {
 	return gulp.src([
-			'./bower_components/bootstrap-sass/assets/javascripts/bootstrap.js',
-			'js/main.js'
+			'./js/**/*.js'
 		], {
 			allowEmpty: true
 		})

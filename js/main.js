@@ -11,3 +11,10 @@ $(document).ready(function() {
 			$(".navbar-menu").toggleClass("is-active");
 	});
 });
+
+// $.getJSON('https://jsonplaceholder.typicode.com/todos/1', function (results) {
+//         nunjucks.render('pages/blog.njk', { results : results }, function (err, res) {
+//       		$('.list').html(res);
+//
+//         });
+//     });
