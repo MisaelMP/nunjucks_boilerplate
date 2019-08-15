@@ -1,5 +1,11 @@
-{% extends "templates/default.njk" %}
+{% extends 'templates/default.njk' %}
 {% block content %}
-<ul class="list">{{results.title}}</ul>
-<h1 class="has-text-centered is-size-3 has-text-weight-bold is-capitalized">content here</h1>
+  <div class="list is-hoverable"></div>
+  <script id="template" type="text/nunjucks">
+    {% raw%}
+      <a class="list-item has-text-centered">{{results.title}}</a>
+      <a class="list-item has-text-centered">{{results.completed}}</a>
+      <a class="list-item has-text-centered">{{results.id}}</a>
+    {% endraw%}
+  </script>
 {% endblock %}
