@@ -7,6 +7,9 @@
 const gulp = require('gulp');
 const sass = require('gulp-sass');
 const autoprefixer = require('gulp-autoprefixer');
+const rename = require('gulp-rename');
+const uglify = require('gulp-uglify');
+const babel= require('gulp-babel');
 const sassdoc = require('sassdoc');
 const browserSync = require('browser-sync').create();
 const nunjucksRender = require('gulp-nunjucks-render');
@@ -59,6 +62,12 @@ function scripts() {
 		.pipe(concat({
 			path: 'main.js'
 		}))
+		.pipe(gulp.dest(siteOutput + '/js'))
+		.pipe(rename({ extname: '.min.js' }))
+		.pipe(babel({
+      presets: ['@babel/preset-env']
+    }))
+    .pipe(uglify())
 		.pipe(browserSync.reload({
 			stream: true
 		}))
