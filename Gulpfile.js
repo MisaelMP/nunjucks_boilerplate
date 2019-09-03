@@ -9,7 +9,11 @@ const sass = require('gulp-sass');
 const autoprefixer = require('gulp-autoprefixer');
 const rename = require('gulp-rename');
 const uglify = require('gulp-uglify');
-const babel= require('gulp-babel');
+const babel = require('gulp-babel');
+const babelify = require('babelify');
+const browserify = require('browserify');
+const source = require('vinyl-source-stream');
+const buffer = require('vinyl-buffer');
 const sassdoc = require('sassdoc');
 const browserSync = require('browser-sync').create();
 const nunjucksRender = require('gulp-nunjucks-render');
@@ -53,26 +57,27 @@ function scss() {
 // Javascript
 // -----------------------------------------------------------------------------
 
-function scripts() {
-	return gulp.src([
-			'./js/**/*.js'
-		], {
-			allowEmpty: true
-		})
-		.pipe(concat({
-			path: 'main.js'
-		}))
-		.pipe(gulp.dest(siteOutput + '/js'))
-		.pipe(rename({ extname: '.min.js' }))
-		.pipe(babel({
-      presets: ['@babel/preset-env']
-    }))
-    .pipe(uglify())
-		.pipe(browserSync.reload({
-			stream: true
-		}))
-		.pipe(gulp.dest(siteOutput + '/js'));
-};
+// function scripts() {
+// 	return gulp.src([
+// 			'./js/**/*.js'
+// 		], {
+// 			allowEmpty: true
+// 		})
+// 		.pipe(concat({
+// 			path: 'main.js'
+// 		}))
+// 		.pipe(gulp.dest(siteOutput + '/js'))
+// 		.pipe(rename({
+// 			extname: '.min.js'
+// 		}))
+// 		.pipe(babel({
+// 			presets: ['@babel/preset-env']
+// 		}))
+// 		.pipe(browserSync.reload({
+// 			stream: true
+// 		}))
+// 		.pipe(gulp.dest(siteOutput + '/js'));
+// };
 
 // -----------------------------------------------------------------------------
 // Templating
@@ -87,6 +92,26 @@ function nunjucks() {
 		// output files in dist folder
 		.pipe(gulp.dest(siteOutput))
 };
+
+// -----------------------------------------------------------------------------
+// bundle
+// -----------------------------------------------------------------------------
+
+function bundle() {
+	return browserify('./js/main.js')
+		.transform(babelify, {
+			presets: ['@babel/preset-env']
+		})
+		.bundle()
+		//Pass desired output filename to vinyl-source-stream
+		.pipe(source('main.bundle.js'))
+		.pipe(buffer()) // <----- convert from streaming to buffered vinyl file object
+		.pipe(uglify())
+		// Start piping stream to tasks!
+		.pipe(gulp.dest(siteOutput + '/js'));
+};
+
+
 
 // -----------------------------------------------------------------------------
 // Imagemin
@@ -136,7 +161,7 @@ function watch() {
 		console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
 	});
 
-	gulp.watch('./js/*', gulp.series(scripts)).on('change', browserSync.reload);
+	gulp.watch('./js/*', gulp.series(bundle)).on('change', browserSync.reload);
 
 	//Watch nunjuck templates and reload browser if change
 	gulp.watch(inputTemplates, gulp.series(nunjucks)).on('change', browserSync.reload);
@@ -163,7 +188,7 @@ exports.watch = watch;
 exports.broserReload = browserReload;
 exports.scss = scss;
 exports.scssdoc = scssdoc;
-exports.scripts = scripts;
+// exports.scripts = scripts;
 exports.nunjucks = nunjucks;
 exports.img = img;
 
@@ -171,4 +196,4 @@ exports.img = img;
 // Default task
 // -----------------------------------------------------------------------------
 
-exports.default = gulp.parallel(scss, nunjucks, img, scripts, watch, browserReload);
+exports.default = gulp.parallel(scss, nunjucks, img,bundle, watch, browserReload);

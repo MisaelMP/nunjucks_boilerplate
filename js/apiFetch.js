@@ -1,4 +1,7 @@
-$(document).ready(function() {
+var nunjucks = require('nunjucks');
+
+
+module.exports = $(document).ready(function() {
 	if ($('#template').length) {
 		$.getJSON('https://jsonplaceholder.typicode.com/todos/1', function(
 			results
